@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python test_todo_app.py)",
+      "Bash(dir /s)",
+      "Bash(dir /s /b)",
+      "Bash(cmd /c \"dir /s\")",
+      "Bash(cmd /c \"dir /s /b\")",
+      "Bash(python src/main.py)",
+      "Bash(dir)",
+      "Bash(mkdir \"phase 1\" \"phase 2\" \"phase 3\" \"phase 4\" \"phase 5\")",
+      "Bash(move src \"phase 1\")",
+      "Bash(move specs-history \"phase 1\")",
+      "Bash(move test_todo_app.py \"phase 1\")",
+      "Bash(move requirements.txt \"phase 1\")",
+      "Bash(cmd /c \"move src \"\"phase 1\"\" && move specs-history \"\"phase 1\"\" && move test_todo_app.py \"\"phase 1\"\" && move requirements.txt \"\"phase 1\"\"\")",
+      "Bash(cmd /c \"move src \"\"phase 1\\\\\"\" && move specs-history \"\"phase 1\\\\\"\" && move test_todo_app.py \"\"phase 1\\\\\"\" && move requirements.txt \"\"phase 1\\\\\"\"\")",
+      "Bash(powershell -Command \"Move-Item -Path ''src'' -Destination ''phase 1''; Move-Item -Path ''specs-history'' -Destination ''phase 1''; Move-Item -Path ''test_todo_app.py'' -Destination ''phase 1''; Move-Item -Path ''requirements.txt'' -Destination ''phase 1''\")"
+    ]
+  }
+}
