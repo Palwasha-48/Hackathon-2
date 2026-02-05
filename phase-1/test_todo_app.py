@@ -1,6 +1,3 @@
-"""
-Simple test to verify Todo Console App functionality.
-"""
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
