@@ -1,0 +1,15 @@
+fastapi[standard]
+sqlmodel
+psycopg2-binary
+python-jose[cryptography]
+passlib[bcrypt]
+PyJWT
+asyncpg
+openai-agents
+agents
+openai-chatkit
+openai 
+httpx
+python-dotenv
+mcp
+requests
