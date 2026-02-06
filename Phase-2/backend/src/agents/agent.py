@@ -41,7 +41,7 @@ logger = get_logger(__name__)
 class TodoAgent:
     def __init__(self):
         """Initialize the Todo Agent with MCP integration"""
-        self.model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")  # Updated to newer model if available
+        self.model = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")  # Updated to newer model if available
         self.system_prompt = """
         You are a helpful todo assistant. You can help users add, list, complete, delete, and update their todos.
         Use the appropriate MCP tools for these operations.

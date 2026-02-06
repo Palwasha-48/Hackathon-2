@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, Lock, Loader2, Mail, Key, User } from "lucide-react";
+import { Shield Check, Lock, Loader2, Mail, Key, User } from "lucide-react";
 
 /**
  * New Operative Registration

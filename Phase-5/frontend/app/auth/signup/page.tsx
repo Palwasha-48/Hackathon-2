@@ -52,7 +52,7 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-aurora animate-aurora flex items-center justify-center p-4">
-      <motion.div
+      <motion div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md"

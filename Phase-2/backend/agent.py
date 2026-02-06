@@ -32,7 +32,7 @@ def init_llm_client() -> AsyncOpenAI:
 
 
 # ===== LLM SETUP =====
-GEMINI_MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL_NAME = "gemini-2.5-flash"
 _client = init_llm_client()
 GEMINI_MODEL = OpenAIChatCompletionsModel(
     model=GEMINI_MODEL_NAME,

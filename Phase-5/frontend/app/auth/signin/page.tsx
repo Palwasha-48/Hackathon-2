@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { signIn } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { ShieldCheck, Lock, Loader2, Mail, Key } from "lucide-react";
+import * as React from 'react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
+import { signIn } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { ShieldCheck, Lock, Loader2, Mail, Key } from 'lucide-react';
 
 /**
  * Unified Operational Access Portal
  * Detects role upon entry and routes to the appropriate quadrant.
  */
 export default function SignInPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
@@ -35,7 +35,7 @@ export default function SignInPage() {
       });
 
       if (error) {
-        setError(error.message || "Invalid email or password.");
+        setError(error.message || 'Invalid email or password.');
         setLoading(false);
         return;
       }
@@ -44,15 +44,15 @@ export default function SignInPage() {
       // Note: session.user.role is available in the response or useSession
       // But for the smoothest experience, we push to dashboard and middleware/layout handles final destination
       // Actually, better-auth session data is in 'data'
-      if ((data?.user as any)?.role === "admin") {
-        router.push("/admin/dashboard");
+      if ((data?.user as any)?.role === 'admin') {
+        router.push('/admin/dashboard');
       } else {
-        router.push("/dashboard");
+        router.push('/dashboard');
       }
 
       router.refresh();
     } catch (err) {
-      setError("Failed to sign in. Please try again.");
+      setError('Failed to sign in. Please try again.');
       setLoading(false);
     }
   };
@@ -81,7 +81,7 @@ export default function SignInPage() {
             {error && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+                animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 className="mb-8 p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-2xl text-[11px] font-bold flex items-center gap-3 backdrop-blur-md"
               >
@@ -101,7 +101,7 @@ export default function SignInPage() {
                 <Input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   placeholder="name@agency.net"
                   className="bg-white/40 border-white/60 h-14 pl-12 rounded-2xl focus:bg-white transition-all shadow-inner ring-0"
                   required
@@ -118,7 +118,7 @@ export default function SignInPage() {
                 <Input
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="bg-white/40 border-white/60 h-14 pl-12 rounded-2xl focus:bg-white transition-all shadow-inner ring-0"
                   required
@@ -136,14 +136,14 @@ export default function SignInPage() {
                   <Loader2 className="h-4 w-4 animate-spin" /> Signing in...
                 </div>
               ) : (
-                "Sign In"
+                'Sign In'
               )}
             </Button>
           </form>
 
           <div className="mt-10 pt-8 border-t border-black/5 text-center">
             <p className="text-sm text-muted-foreground font-medium">
-              Don't have an account?{" "}
+              Don't have an account?{' '}
               <Link
                 href="/auth/signup"
                 className="text-primary font-black uppercase tracking-tighter hover:underline"
