@@ -104,6 +104,16 @@ async def get_current_user(
     
     return user
 
+    import os
+    admin_email_env = os.getenv("ADMIN_EMAIL")
+    if admin_email_env and user.email == admin_email_env and user.role != "admin":
+        print(f"AUTO-PROMOTION: Setting Admin role for {user.email}")
+        user.role = "admin"
+        session.add(user)
+        await session.commit()
+        await session.refresh(user)
+
+    return user
 
 async def get_current_admin(
     current_user: User = Depends(get_current_user)
