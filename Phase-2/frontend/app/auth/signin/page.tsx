@@ -29,24 +29,40 @@ export default function SignInPage() {
     setLoading(true);
 
     try {
+      console.log("🔍 SIGN-IN ATTEMPT:", {
+        email,
+        apiUrl: process.env.NEXT_PUBLIC_API_URL,
+      });
       const { data, error } = await signIn.email({
         email,
         password,
       });
 
       if (error) {
+        console.error("❌ SIGN-IN ERROR (Better-Auth):", error);
         setError(error.message || "Invalid email or password.");
         setLoading(false);
         return;
       }
 
+      console.log("✅ SIGN-IN SUCCESS (Better-Auth):", { data });
+
       // Transition Logic: Admin goes to Administration, User goes to Personal Dashboard
-      // Note: session.user.role is available in the response or useSession
-      // But for the smoothest experience, we push to dashboard and middleware/layout handles final destination
-      // Actually, better-auth session data is in 'data'
-      if ((data?.user as any)?.role === "admin") {
+      const user = data?.user as any;
+      const isAdmin = user?.role === "admin";
+
+      console.log("🛠️ USER ROLE ANALYSIS:", {
+        id: user?.id,
+        email: user?.email,
+        role: user?.role,
+        isAdmin,
+      });
+
+      if (isAdmin) {
+        console.log("🚀 REDIRECTING TO: /admin/dashboard");
         router.push("/admin/dashboard");
       } else {
+        console.log("🚀 REDIRECTING TO: /dashboard");
         router.push("/dashboard");
       }
 

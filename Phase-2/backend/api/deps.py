@@ -31,14 +31,14 @@ async def get_current_user(
     token = None
     if credentials:
         token = credentials.credentials
-    
+
     # Fallback: Try query parameter 'token' if header is missing
     # This is required for ChatKit Web Component which has issues sending headers with custom URL
     if not token and request.query_params.get("token"):
         token = request.query_params.get("token")
 
     if not token:
-         raise credentials_exception
+        raise credentials_exception
 
     user_id: Optional[str] = None
     user_role: str = "user"  # Default role if not found in token
@@ -60,12 +60,12 @@ async def get_current_user(
         print(f"DEBUG: Checking DB for Opaque Token: {token[:15]}...")
         from models.session import Session as DbSession
         from datetime import datetime
-        
+
         # Query session table
         query = select(DbSession).where(DbSession.token == token)
         result = await session.execute(query)
         db_session = result.scalar_one_or_none()
-        
+
         if db_session:
             # Check expiration
             # Ensure proper timezone handling
@@ -74,7 +74,7 @@ async def get_current_user(
             if expires_at.tzinfo is None:
                 # If naive, assume UTC
                 expires_at = expires_at.replace(tzinfo=timezone.utc)
-            
+
             # Use now(timezone.utc) for correct aware datetime
             now_utc = datetime.now(timezone.utc)
 
@@ -89,31 +89,47 @@ async def get_current_user(
     if not user_id:
         raise credentials_exception
 
+    # --- LOGGING: AUTH ATTEMPT ---
+    auth_header = request.headers.get("Authorization")
+    print(f"DEBUG: Auth Check - Header present: {bool(auth_header)}")
+
     # 3. Get user from database
     result = await session.execute(select(User).where(User.id == user_id))
     user = result.first()
 
-    if user is None:
+    if user:
+        user = user[0]
+        print(
+            f"DEBUG: Found user in DB: {user.email} (ID: {user.id}, Role: {user.role})")
+    else:
+        print(f"DEBUG: User {user_id} not found in database. Raising 401.")
         raise credentials_exception
 
-    user = user[0]  # Extract user from tuple
-
-    # For JWTs, we might sync the role. For Opaque, the DB role is truth.
-    # Note: If JWT had a claimed role, we might want to respect it or sync it.
-    # But trusting the DB is safer.
-    
-    return user
-
+    # --- AUTO-PROMOTION Logic ---
+    # Automatically grant 'admin' role if the email matches ADMIN_EMAIL from env
     import os
     admin_email_env = os.getenv("ADMIN_EMAIL")
-    if admin_email_env and user.email == admin_email_env and user.role != "admin":
-        print(f"AUTO-PROMOTION: Setting Admin role for {user.email}")
-        user.role = "admin"
-        session.add(user)
-        await session.commit()
-        await session.refresh(user)
+
+    print(
+        f"DEBUG: Auto-Promotion Check - Admin email in env: {'***MASKED***' if admin_email_env else 'NONE'}")
+
+    if admin_email_env and user.email:
+        is_match = user.email.lower() == admin_email_env.lower()
+        print(
+            f"DEBUG: Email matches admin env? {is_match} (DB: {user.email.lower()}, Env: {admin_email_env.lower() if admin_email_env else 'N/A'})")
+
+        if is_match and user.role != "admin":
+            print(f"AUTO-PROMOTION: Setting Admin role for {user.email}")
+            user.role = "admin"
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+            print(f"DEBUG: Role updated to: {user.role}")
+        elif is_match:
+            print(f"DEBUG: User is already admin.")
 
     return user
+
 
 async def get_current_admin(
     current_user: User = Depends(get_current_user)
