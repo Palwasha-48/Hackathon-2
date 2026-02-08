@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { ChatKit, useChatKit } from "@openai/chatkit-react";
-import type { ChatKitOptions, HeaderIcon } from "@openai/chatkit-react";
-import { useTheme } from "next-themes";
-import { useMemo, useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { useSidebar } from "../ui/sidebar";
-import { authClient } from "@/lib/auth-client";
-import { useAuth } from "@/contexts/AuthContext";
+import { ChatKit, useChatKit } from '@openai/chatkit-react';
+import type { ChatKitOptions, HeaderIcon } from '@openai/chatkit-react';
+import { useTheme } from 'next-themes';
+import { useMemo, useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { useSidebar } from '../ui/sidebar';
+import { authClient } from '@/lib/auth-client';
+import { useAuth } from '@/contexts/AuthContext';
 
 /**
  * Todo ChatKit Component
@@ -19,7 +19,7 @@ function TodoChatKitComponent() {
   const { resolvedTheme, theme: activeTheme } = useTheme();
   const { user, session, isLoading: authLoading } = useAuth();
   const [mounted, setMounted] = useState(false);
-  const isDark = resolvedTheme === "dark" || activeTheme === "dark";
+  const isDark = resolvedTheme === 'dark' || activeTheme === 'dark';
 
   // Resolve backend URL with robustness for 8000/8001 port confusion
   const backendUrl = useMemo(() => {
@@ -28,22 +28,22 @@ function TodoChatKitComponent() {
 
     // If it's localhost and port 8001, but we know our ChatKit server is on 8000, force 8000
     if (
-      envUrl?.includes("localhost:8001") ||
-      envUrl?.includes("127.0.0.1:8001")
+      envUrl?.includes('localhost:8001') ||
+      envUrl?.includes('127.0.0.1:8001')
     ) {
-      return envUrl.replace("8001", "8000");
+      return envUrl.replace('8001', '8000');
     }
 
-    return envUrl || "http://localhost:8000";
+    return envUrl || 'http://localhost:8000';
   }, []);
 
   // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
     if (user) {
-      const finalUrl = `${backendUrl.replace(/\/$/, "")}/chatkit`;
-      console.log("🚀 TodoChatKit mounting for:", user.email);
-      console.log("🔌 Backend URL:", finalUrl);
+      const finalUrl = `${backendUrl.replace(/\/$/, '')}/chatkit`;
+      console.log('🚀 TodoChatKit mounting for:', user.email);
+      console.log('🔌 Backend URL:', finalUrl);
     }
   }, [backendUrl, user]);
 
@@ -54,22 +54,22 @@ function TodoChatKitComponent() {
   const chatkitOptions: ChatKitOptions = useMemo(
     () => ({
       api: {
-        url: `${backendUrl.replace(/\/$/, "")}/chatkit`,
-        domainKey: "domain_pk_694e660b27cc8194af36166984c678920dffab26d4b3cd54", // Production domain key
+        url: `${backendUrl.replace(/\/$/, '')}/chatkit`,
+        domainKey: 'domain_pk_6988fa18ceec8190bd82a28a40149e8106a3b8b0bd56cdbe', // Production domain key
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }),
         },
       },
       header: {
         title: {
-          text: "Todo Assistant 🤖",
+          text: 'Todo Assistant 🤖',
         },
         leftAction: {
-          icon: "close" as HeaderIcon,
+          icon: 'close' as HeaderIcon,
           onClick: toggleSidebar,
         },
       },
-      theme: (isDark ? "dark" : "light") as "dark" | "light",
+      theme: (isDark ? 'dark' : 'light') as 'dark' | 'light',
     }),
     [backendUrl, isDark, toggleSidebar, token]
   );

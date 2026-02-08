@@ -55,7 +55,7 @@ function TodoChatKitComponent() {
     () => ({
       api: {
         url: `${backendUrl.replace(/\/$/, "")}/chatkit`,
-        domainKey: "domain_pk_694e660b27cc8194af36166984c678920dffab26d4b3cd54", // Production domain key
+        domainKey: "domain_pk_6988fa18ceec8190bd82a28a40149e8106a3b8b0bd56cdbe", // Production domain key
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }),
         },
@@ -71,7 +71,7 @@ function TodoChatKitComponent() {
       },
       theme: (isDark ? "dark" : "light") as "dark" | "light",
     }),
-    [backendUrl, isDark, toggleSidebar, token]
+    [backendUrl, isDark, toggleSidebar, token],
   );
 
   // Initialize ChatKit
